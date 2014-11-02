@@ -1,6 +1,6 @@
-module.exports = function(ipAddress) {
-    var request = require('request');
+var request = require('request');
 
+module.exports = function(ipAddress) {
     this.IP_ADDRESS = ipAddress;
     this.port = '8080';
 
