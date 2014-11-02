@@ -5,12 +5,17 @@ var dtvRemote = new DirecTV('192.168.1.114');
 dtvRemote.validate();
 
 var args = process.argv.slice(2);
-//getProgInfo(args[0], args[1], args[2]);
-dtvRemote.getLocations(1);
-//dtvRemote.getSerialNum();
+
 //dtvRemote.getOptions();
+
+//dtvRemote.getLocations();
+//dtvRemote.getSerialNum('88f7c7da1456');
+
 //dtvRemote.getVersion();
-//getMode(args[0]);
+//dtvRemote.getMode();
+//dtvRemote.processKey(args[0], args[1]);
+//dtvRemote.processCommand(args[0]);
+
+//dtvRemote.getProgInfo(args[0], args[1], args[2]);
 //dtvRemote.getTuned(args[0]);
-//processKey(args[0]);
-//processCommand(args[0]);
+dtvRemote.tune(args[0], args[1]);
