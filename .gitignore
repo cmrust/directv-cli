@@ -3,3 +3,9 @@ coverage
 
 # Dependency directory
 node_modules
+
+# npm logs
+npm-debug.log
+
+# WebStorm working directory
+.idea
