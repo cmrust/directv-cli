@@ -1,4 +1,5 @@
-var request = require('request');
+var http = require('http');
+var utils = require('./utils');
 
 module.exports = function(ipAddress) {
     this.IP_ADDRESS = ipAddress;
@@ -8,14 +9,16 @@ module.exports = function(ipAddress) {
         if (!/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/.test(this.IP_ADDRESS)) {
             console.log('This is not a valid IPv4 address');
         }
-    }
+    };
 
     // Lists the available endpoints on the system
     this.getOptions = function(){
-        var route = '/info/getOptions';
+        var path = '/info/getOptions';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         makeRequest(options, function(err, response){
@@ -31,15 +34,16 @@ module.exports = function(ipAddress) {
 //  i'm not sure what the difference is yet,
 //  but 1 shows more of my wireless Genie STBs
     this.getLocations = function(type){
-        var route = '/info/getLocations';
+        var path = '/info/getLocations';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         if (typeof type !== 'undefined') {
-            options.qs.type = type;
+            options.path = utils.buildQueryString(options.path, { type: type });
         }
 
         makeRequest(options, function(err, response){
@@ -50,15 +54,16 @@ module.exports = function(ipAddress) {
 // "STB serial number."
 // clientAddr is optional and for specifying a separate networked STB
     this.getSerialNum = function(clientAddr){
-        var route = '/info/getSerialNum';
+        var path = '/info/getSerialNum';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
@@ -69,10 +74,12 @@ module.exports = function(ipAddress) {
 // "Set-top-box and SHEF information."
 // Also returns the systemTime property, which is the current epoch timestamp.
     this.getVersion = function(){
-        var route = '/info/getVersion';
+        var path = '/info/getVersion';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         makeRequest(options, function(err, response){
@@ -84,15 +91,16 @@ module.exports = function(ipAddress) {
 // clientAddr is optional and for specifying a separate networked STB
 // It seems the returned mode property reflects the statuses active (1) and inactive (0)
     this.getMode = function(clientAddr){
-        var route = '/info/mode';
+        var path = '/info/mode';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
@@ -104,20 +112,24 @@ module.exports = function(ipAddress) {
 // key is a required string value, that corresponds to buttons on the remote, such as:
 // format, power, rew, pause, play, stop, ffwd, replay, advance, record, guide, active, list, exit, up, down, select, left, right, back, menu, info, red, green, yellow, blue, chanup, chandown, prev, 1, 2, 3, 4, 5, 6, 7, 8, 9, dash, 0, enter
     this.processKey = function(key, clientAddr){
-        var route = '/remote/processKey';
+        var path = '/remote/processKey';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { key: key }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path + '?key=' + key
         };
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
+            if (err) {
+                console.log('Request to path:', options.path, 'failed with:', err);
+            }
             console.log(response);
-        })
+        });
     };
 
 // "Process a command request from remote control."
@@ -142,11 +154,12 @@ module.exports = function(ipAddress) {
 // 'FA9D' GetSignalQualityMT
 // 'FA9F' OpenUserChannelMT
     this.processCommand = function(cmd){
-        var route = '/serial/processCommand';
+        var path = '/serial/processCommand';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { cmd: cmd }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path + '?cmd=' + cmd
         };
 
         makeRequest(options, function(err, response){
@@ -159,19 +172,20 @@ module.exports = function(ipAddress) {
 // startTime is an optional epoch timestamp, default is now
 // clientAddr is optional and for specifying a separate networked STB
     this.getProgInfo = function(channel, startTime, clientAddr){
-        var route = '/tv/getProgInfo';
+        var path = '/tv/getProgInfo';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { major: channel }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path + '?major=' + channel
         };
 
         if (typeof startTime !== 'undefined') {
-            options.qs.time = startTime;
+            options.path = utils.buildQueryString(options.path, { time: startTime });
         }
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
@@ -184,15 +198,16 @@ module.exports = function(ipAddress) {
 // does Forbidden possibly mean the cable box is turned off
 // clientAddr is optional and for specifying a separate networked STB
     this.getTuned = function(clientAddr){
-        var route = '/tv/getTuned';
+        var path = '/tv/getTuned';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path
         };
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
@@ -204,15 +219,16 @@ module.exports = function(ipAddress) {
 // NOT TESTED
 // clientAddr is optional and for specifying a separate networked STB
     this.tune = function(channel, clientAddr){
-        var route = '/tv/tune';
+        var path = '/tv/tune';
 
         var options = {
-            url: 'http://' + this.IP_ADDRESS + ':8080' + route,
-            qs: { major: channel }
+            hostname: this.IP_ADDRESS,
+            port: 8080,
+            path: path + '?major=' + channel
         };
 
         if (typeof clientAddr !== 'undefined') {
-            options.qs.clientAddr = clientAddr;
+            options.path = utils.buildQueryString(options.path, { clientAddr: clientAddr });
         }
 
         makeRequest(options, function(err, response){
@@ -221,24 +237,29 @@ module.exports = function(ipAddress) {
     };
 
     var makeRequest = function(options, callback){
-        request.get(options, function (err, res, body){
-            if (err) {
-                callback(err);
-            } else {
+        var body = '';
+        http.get(options, function(res) {
+            res.on('data', function (chunk) {
+                body += chunk;
+            });
+            res.on('end', function () {
                 try {
-                    parsedBody = JSON.parse(body);
+                    var parsedBody = JSON.parse(body);
                 } catch (err) {
-                    callback(new Error('Parsing the request body failed', err));
+                    callback(new Error('Parsing the request body failed: ' + err));
                 }
-                if (typeof parsedBody.status !== 'undefined') {
+                if (typeof parsedBody !== 'undefined' && typeof parsedBody.status !== 'undefined') {
+                    console.log('Path:', parsedBody.status.query);
                     if (parsedBody.status.code !== 200) {
-                        callback(new Error('Received bad response code', parsedBody.status.code))
+                        callback(new Error('Received bad response code: ' + parsedBody.status.code + ' (' + parsedBody.status.msg + ')'));
                     } else {
                         delete parsedBody.status;
                     }
                 }
                 callback(null, parsedBody);
-            }
+            });
+        }).on('error', function(err) {
+            callback(new Error('HTTP request failed: ' + err));
         });
     };
 };
