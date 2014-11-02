@@ -5,12 +5,6 @@ module.exports = function(ipAddress) {
     this.IP_ADDRESS = ipAddress;
     this.port = '8080';
 
-    this.validate = function(){
-        if (!/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/.test(this.IP_ADDRESS)) {
-            console.log('This is not a valid IPv4 address');
-        }
-    };
-
     // Lists the available endpoints on the system
     this.getOptions = function(){
         var path = '/info/getOptions';
