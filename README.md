@@ -20,4 +20,4 @@ Implement the error checking from processKey on the other functions.
 Credit
 ------
 
-This code is loosely based on the research done by Jeremy Whitlock for his [directv-remote-api](https://github.com/whitlockjc/directv-remote-api) project. It has been rewritten from the ground up to work on Node.js, without the jQuery and Underscore.js deps, on the command line.
+This code is loosely based on the research done by Jeremy Whitlock for his [directv-remote-api](https://github.com/whitlockjc/directv-remote-api) project. It has been rewritten from the ground up to work on Node.js on the command line, without the jQuery and Underscore.js deps.
