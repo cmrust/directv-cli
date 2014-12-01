@@ -20,7 +20,11 @@ module.exports.findLocalSubnet = function (callback) {
         if (err) {
             callback(new Error('Failed to find current local IP address: ' + err));
         } else {
-            callback(null, address.split('.').slice(0,3).join('.') + '.');
+            if (address.indexOf('127') === 0) {
+                callback(null, '192.168.1.');
+            } else {
+                callback(null, address.split('.').slice(0,3).join('.') + '.');
+            }
         }
     });
 };
@@ -55,6 +59,7 @@ module.exports.validate = function(IP_ADDRESS, callback){
                 if (parsedBody.status.code !== 200) {
                     callback(new Error('Host does not appear to be a valid STB: ' + parsedBody.status.code + ' (' + parsedBody.status.msg + ')'));
                 } else {
+                    parsedBody.ipAddr = IP_ADDRESS;
                     callback(null, parsedBody);
                 }
             } else {

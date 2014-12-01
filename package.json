@@ -11,8 +11,12 @@
     "url": "https://github.com/raptastics/directv-cli.git"
   },
   "author": "raptastics",
-  "license": "Apache 2.0",
+  "license": "BSD",
   "bugs": {
     "url": "https://github.com/raptastics/directv-cli/issues"
+  },
+  "dependencies": {
+    "commander": "^2.5.0",
+    "directv-remote": "0.0.3"
   }
 }
