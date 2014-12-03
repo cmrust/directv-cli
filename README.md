@@ -39,7 +39,7 @@ The `--watching` parameter will list program information for whatever is current
 
 If you have Whole-Home DVR service, you can access the extraneous boxes as well. Use the `--locations` switch to list the client addresses of each STB in your home, like:
 
-    directv --ip 192.168.1.104 --locations
+    $ directv --ip 192.168.1.104 --locations
     Found 3 Set Top Boxes:
     MB: 88F7C7DA0269
     B2: 88F7C7DA1460
