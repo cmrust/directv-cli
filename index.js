@@ -30,14 +30,22 @@ program
 
 // read the config file
 fs.readFile(CONFIG_FILE, 'utf8', function (err, data) {
+    config = {};
     // bail if the config file cannot be read
-    if (err) return console.error(err);
-
-    try {
-        config = JSON.parse(data);
-    } catch (err) {
-        // again, bail if the config file cannot be read
-        return console.log(new Error('Invalid config file: ' + CONFIG_FILE));
+    if (err) {
+        if (err.code === 'ENOENT') {
+            // if the config file doesn't exist, continue on
+        } else {
+            // bail if there is a weird file error
+            return console.error(err);
+        }
+    } else {
+        try {
+            config = JSON.parse(data);
+        } catch (err) {
+            // again, bail if the config file cannot be read
+            return console.log(new Error('Invalid config file: ' + CONFIG_FILE));
+        }
     }
 
     // hoist these vars to the global scope
