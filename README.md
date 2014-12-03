@@ -99,3 +99,10 @@ The full known list of available keys is:
 These can be sent, like:
 
     directv --key yellow
+
+To-Do List
+----------
+
+* Implement a find switch, to scan the network for DirecTV hosts
+
+* Implement a REPL to rapid send Key commands
