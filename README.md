@@ -33,7 +33,7 @@ You'll need to specify the IP address of your STB, like:
 
     directv --ip 192.168.1.104 --watching
 
-The `--watching` parameter will list program information for whatever is currently being watched.
+> the `--watching` parameter will list program information for whatever is currently being watched
 
 ### Whole-Home DVR
 
@@ -72,6 +72,8 @@ Then you can issue commands without all the extra switches, like:
 
     directv --system
 
+> the `--system` switch will output detailed system info
+
 If the `--ip` or `--client` switches are still used, they will override the config file.
 
 ### Keys
@@ -79,7 +81,20 @@ If the `--ip` or `--client` switches are still used, they will override the conf
 You're able to send any of the normal remote control keys, such as `guide`, `exit`, `prev`...
 
 The full known list of available keys is:
-<br>*format, power, rew, pause, play, stop, ffwd, replay, advance, record, guide, active, list, exit, up, down, select, left, right, back, menu, info, red, green, yellow, blue, chanup, chandown, prev, 1, 2, 3, 4, 5, 6, 7, 8, 9, dash, 0, enter*
+
+`format`, `power`
+
+`rew`, `pause`, `play`, `stop`, `ffwd`, `replay`, `advance`, `record`
+
+`guide`, `active`, `list`, `exit`, `menu`, `info`
+
+`up`, `down`, `select`, `left`, `right`
+
+`red`, `green`, `yellow`, `blue`
+
+`back`, `chanup`, `chandown`, `prev`
+
+`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `dash`, `0`, `enter`
 
 These can be sent, like:
 
