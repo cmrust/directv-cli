@@ -33,7 +33,7 @@ You'll need to specify the IP address of your STB, like:
 
     directv --ip 192.168.1.104 --watching
 
-The `--watching` parameter will list program information for whatever is currently being played.
+The `--watching` parameter will list program information for whatever is currently being watched.
 
 ### Whole-Home DVR
 
