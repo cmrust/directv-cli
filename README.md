@@ -51,7 +51,7 @@ Then you can see what's being watched on any of those boxes, like:
 
 ### Command line arguments
 
-Each of these switches also come with a shorthand version. `--ip` can be shortened to `-i` and `--locations` can be shortened to just `-l`.
+These switches each come with a shorthand version as well. `--ip` can be shortened to `-i` and `--locations` can be shortened to `-l`.
 
 To see the rest of the available arguments, run the program with a `--help` or `-h` parameter:
 
@@ -59,9 +59,9 @@ To see the rest of the available arguments, run the program with a `--help` or `
 
 ### Config file
 
-You can also store the variables IP address and Client address in a config file, so that they don't have be typed every time.
+You can store the variables IP address and Client address in a config file, so that they don't have be typed every time the command's invoked.
 
-To store these, create a plaintext file, `.directvrc`, in your user's home directory, with JSON contents like:
+To store these, create a plaintext file, `.directvrc`, in the user's home directory, with JSON contents like:
 
     {
       "ipAddr": "192.168.1.104",
@@ -72,11 +72,15 @@ Then you can issue commands without all the extra switches, like:
 
     directv --system
 
+If the `--ip` or `--client` switches are still used, they will override the config file.
+
 ### Keys
 
-You're able to send any of the normal remote control keys, such as `guide`, `exit`, `prev`... The full list of known available keys is:
+You're able to send any of the normal remote control keys, such as `guide`, `exit`, `prev`...
+
+The full known list of available keys is:
 <br>*format, power, rew, pause, play, stop, ffwd, replay, advance, record, guide, active, list, exit, up, down, select, left, right, back, menu, info, red, green, yellow, blue, chanup, chandown, prev, 1, 2, 3, 4, 5, 6, 7, 8, 9, dash, 0, enter*
 
 These can be sent, like:
 
-    directv --key menu
+    directv --key yellow
