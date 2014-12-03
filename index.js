@@ -1,7 +1,20 @@
 #!/usr/bin/env node
+// npm modules
 var DirecTV = require('directv-remote');
 var program = require('commander');
+// node api modules
+var fs = require('fs');
+var path = require('path');
 
+// declare constants
+var HOME_DIR = process.env.HOME || process.env.USERPROFILE;
+var CONFIG_FILE = path.join(HOME_DIR,'.directvrc');
+
+// declare global vars
+var ipAddr,
+    clientAddr;
+
+// parse command line arguments (commander)
 program
     .version('0.0.1')
     .option('-i, --ip [address]', 'IP address for the STB [required]')
@@ -15,16 +28,34 @@ program
     .option('-t, --tune [channel]', 'Tunes the STB to the specified channel')
     .parse(process.argv);
 
-DirecTV.validateIP(program.ip, function(err) {
-    if (err) return console.log(err);
+// read the config file
+fs.readFile(CONFIG_FILE, 'utf8', function (err, data) {
+    // bail if the config file cannot be read
+    if (err) return console.error(err);
 
-    var Remote = new DirecTV.Remote(program.ip);
+    try {
+        config = JSON.parse(data);
+    } catch (err) {
+        // again, bail if the config file cannot be read
+        return console.log(new Error('Invalid config file: ' + CONFIG_FILE));
+    }
 
-    var clientAddr = (typeof program.client === 'string') ? program.client : undefined;
+    // hoist these vars to the global scope
+    ipAddr = program.ip || config.ipAddr;
+    clientAddr = program.client || config.clientAddr;
+
+    DirecTV.validateIP(ipAddr, runCommands);
+});
+
+function runCommands(err) {
+    // if the ipAddr is not that of a valid STB, exit now
+    if (err) return console.error(err);
+
+    var Remote = new DirecTV.Remote(ipAddr);
 
     if (program.locations) {
         Remote.getLocations(1,function(err,response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
             if (response.locations.length === 0) {
                 console.log('0 Set Top Boxes found');
             } else {
@@ -39,13 +70,13 @@ DirecTV.validateIP(program.ip, function(err) {
     if (program.system) {
         console.log('System information:')
         Remote.getVersion(function(err,response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
             for (var property in response) {
                 console.log(property + ':', response[property]);
             }
         });
         Remote.getSerialNum(undefined, function(err, response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
             for (var property in response) {
                 console.log(property + ':', response[property]);
             }
@@ -54,7 +85,7 @@ DirecTV.validateIP(program.ip, function(err) {
 
     if (program.watching) {
         Remote.getTuned(clientAddr, function(err, response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
 
             console.log('Show:', response.title, '('+response.rating+')');
             if (response.episodeTitle) console.log('Episode:', response.episodeTitle);
@@ -70,7 +101,7 @@ DirecTV.validateIP(program.ip, function(err) {
 
     if (program.key) {
         Remote.processKey(program.key, clientAddr, function(err, response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
             console.log('Successfully sent', response.key);
         });
     }
@@ -108,7 +139,7 @@ DirecTV.validateIP(program.ip, function(err) {
         }
 
         Remote.getProgInfo(channel, startTime, clientAddr, function(err, response) {
-            if (err) return console.log(err);
+            if (err) return console.err(err);
             console.log('Show:', response.title, '('+response.rating+')');
             if (response.episodeTitle) console.log('Episode:', response.episodeTitle);
             console.log('Channel:', response.callsign, '('+response.major+')');
@@ -124,8 +155,8 @@ DirecTV.validateIP(program.ip, function(err) {
         var channel = program.tune;
 
         Remote.tune(channel, clientAddr, function(err, response) {
-            if (err) return console.log(err);
+            if (err) return console.error(err);
             console.log('Successfully changed channel to', channel);
         });
     }
-});
+}
