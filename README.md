@@ -16,7 +16,7 @@ Setup
 
 Install from npm:
 
-    sudo npm install -g directv-cli
+    npm install -g directv-cli
 
 If you don't have npm, [install Node.js](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager).
 
@@ -29,7 +29,7 @@ Usage
 
 ### IP Address
 
-You'll need to specify the IP address of your STB, like:
+You'll need to specify the IP address of your STB, like in this command:
 
     directv --ip 192.168.1.104 --watching
 
@@ -37,7 +37,7 @@ You'll need to specify the IP address of your STB, like:
 
 ### Whole-Home DVR
 
-If you have Whole-Home DVR service, you can access the extraneous boxes as well. Use the `--locations` switch to list the client addresses of each STB in your home, like:
+If you have Whole-Home DVR service, you can access the extraneous boxes as well. Use the `--locations` switch to list the client addresses for each STB in your home, like:
 
     $ directv --ip 192.168.1.104 --locations
     Found 3 Set Top Boxes:
@@ -59,7 +59,7 @@ To see the rest of the available arguments, run the program with a `--help` or `
 
 ### Config file
 
-You can store the variables IP address and Client address in a config file, so that they don't have be typed every time the command's invoked.
+You can store the variables IP address and client address in a config file, so that they don't have be typed every time the command's invoked.
 
 To store these, create a plaintext file, `.directvrc`, in the user's home directory, with JSON contents like:
 
