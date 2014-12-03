@@ -1,11 +1,15 @@
 directv-cli
 ===========
 
-This application makes use of the HTTP API exposed by most DirecTV STBs to turn the command line into a working remote control.
+This tool makes use of the HTTP API, exposed by most DirecTV STBs (Set Top Boxes), to implement a working remote control on the command line.
 
-Allowing you to simply change the channel, like:
+Allowing you to simply do things like change the channel:
 
     directv --tune 297
+
+Or see what's playing on channel 500:
+
+    directv --guide 500
 
 Setup
 -----
@@ -55,14 +59,18 @@ To see the rest of the available arguments, run the program with a `--help` or `
 
 ### Config file
 
-You can also store the IP address and Client address in a config file, so that they don't have be typed everytime you use the command.
+You can also store the variables IP address and Client address in a config file, so that they don't have be typed every time.
 
-To store these, create a plaintext file, `.directvrc`, in your user's home directory, with contents like:
+To store these, create a plaintext file, `.directvrc`, in your user's home directory, with JSON contents like:
 
     {
       "ipAddr": "192.168.1.104",
       "clientAddr": "88F7C7DA0269"
     }
+
+Then you can issue commands without all the extra switches, like:
+
+    directv --system
 
 ### Keys
 
